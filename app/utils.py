@@ -8,7 +8,6 @@ load_dotenv()
 POSTGRES_USER = os.getenv("POSTGRES_USER")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 POSTGRES_HOST = os.getenv("POSTGRES_HOST")
-# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 
 def connect_to_db(

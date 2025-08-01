@@ -21,8 +21,6 @@ def lambda_handler(event, context):
         with connect_to_db() as conn:
             insert_embeddings(conn, pdf, embeddings)
 
-        logger.info("completed dummy db call")
-
         return {"statusCode": 200, "body": f"✅ Embedded {len(embeddings)} documents"}
 
     except Exception as e:
