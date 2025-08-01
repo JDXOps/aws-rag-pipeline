@@ -5,6 +5,7 @@ from vector_db import insert_embeddings
 
 
 def lambda_handler(event, context):
+
     try:
         logger.info("⚡ Lambda function started")
 

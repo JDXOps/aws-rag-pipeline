@@ -3,6 +3,7 @@ import boto3
 import json
 from botocore.exceptions import ClientError
 import psycopg
+import os
 
 
 logger = logging.getLogger()
@@ -16,7 +17,6 @@ def get_secret(secret_name: str):
     try:
         get_secret_value_response = client.get_secret_value(SecretId=secret_name)
     except ClientError as e:
-        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
         raise e
 
     secret = get_secret_value_response["SecretString"]
@@ -27,20 +27,21 @@ def get_secret(secret_name: str):
 POSTGRES_CRED = get_secret("law-pdf-demo-db")
 POSTGRES_USER = POSTGRES_CRED["username"]
 POSTGRES_PASS = POSTGRES_CRED.get("password")
-POSTGRES_HOST = POSTGRES_CRED.get("host")
+POSTGRES_HOST = os.environ["POSTGRES_HOST"]
 
 
-def connect_to_db(
-    POSTGRES_USER: str = POSTGRES_USER,
-    POSTGRES_PASSWORD: str = POSTGRES_PASS,
-    POSTGRES_HOST: str = POSTGRES_HOST,
-):
+def connect_to_db():
 
-    conn = psycopg.connect(
-        dbname="vecdb",
-        user=POSTGRES_USER,
-        password=POSTGRES_PASSWORD,
-        host=POSTGRES_HOST,
-    )
-
-    return conn
+    try:
+        conn = psycopg.connect(
+            dbname="vecdb",
+            user=POSTGRES_USER,
+            password=POSTGRES_PASS,
+            host=POSTGRES_HOST,
+            port=5432,
+        )
+        logger.info("✅ Successfully connected to the database.")
+        return conn
+    except Exception as e:
+        logger.error(f"❌ Failed to connect to the database: {e}")
+        raise
