@@ -3,8 +3,8 @@ from pdf_retrieval import pdf_retrieval
 from embeddings import create_embeddings
 from vector_db import insert_embeddings
 
-
 def lambda_handler(event, context):
+    
     try:
         logger.info("⚡ Lambda function started")
 
@@ -17,8 +17,12 @@ def lambda_handler(event, context):
 
         logger.info(f"Created {len(embeddings)} of length {len(embeddings[0])}")
 
+        logger.info("supposed to be the db call")
+
         with connect_to_db() as conn:
             insert_embeddings(conn, pdf, embeddings)
+
+        logger.info("completed dummy db call")
 
         return {"statusCode": 200, "body": f"✅ Embedded {len(embeddings)} documents"}
 

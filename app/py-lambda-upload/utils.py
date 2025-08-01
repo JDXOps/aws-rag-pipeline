@@ -2,7 +2,8 @@ import logging
 import boto3
 import json
 from botocore.exceptions import ClientError
-import psycopg
+import psycopg2
+import os
 
 
 logger = logging.getLogger()
@@ -27,20 +28,28 @@ def get_secret(secret_name: str):
 POSTGRES_CRED = get_secret("law-pdf-demo-db")
 POSTGRES_USER = POSTGRES_CRED["username"]
 POSTGRES_PASS = POSTGRES_CRED.get("password")
-POSTGRES_HOST = POSTGRES_CRED.get("host")
+POSTGRES_HOST = os.environ["POSTGRES_HOST"]
 
 
-def connect_to_db(
-    POSTGRES_USER: str = POSTGRES_USER,
-    POSTGRES_PASSWORD: str = POSTGRES_PASS,
-    POSTGRES_HOST: str = POSTGRES_HOST,
-):
+def connect_to_db():
 
-    conn = psycopg.connect(
-        dbname="vecdb",
-        user=POSTGRES_USER,
-        password=POSTGRES_PASSWORD,
-        host=POSTGRES_HOST,
-    )
+    logger.info("Starting DB Connection")
+    logger.info(f"Using psycopg2 version: {psycopg2.__version__}")
 
-    return conn
+
+    try:
+        conn = psycopg2.connect(
+            dbname="vecdb",
+            user=POSTGRES_USER,
+            password=POSTGRES_PASS,
+            host="terraform-20250801140632557400000001.cla62wuicb6s.eu-west-2.rds.amazonaws.com",  ## somethign wrong with env? 
+            port = 5432
+        )
+        logger.info("✅ Successfully connected to the database.")
+        return conn
+    except Exception as e:
+        logger.error(f"❌ Failed to connect to the database: {e}")
+        raise
+
+
+
