@@ -16,10 +16,10 @@ def insert_embeddings(
                 try:
                     cursor.execute(
                         """
-                        INSERT INTO documents (content, embedding, metadata)
+                        INSERT INTO documents (embedding, document, metadata)
                         VALUES (%s, %s, %s)
                         """,
-                        (content, embedding, json.dumps(metadata)),
+                        (embedding, content, json.dumps(metadata)),
                     )
 
                     inserted_count += 1

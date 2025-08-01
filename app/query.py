@@ -35,42 +35,62 @@ Law firm employees ranging from junior associates to senior partners.
 
 """
 
-def answer_query(question:str, region:str="eu-west-2",aws_profile:str="default", top_k: int = 3, prompt_template:str=PROMPT_TEMPLATE):
+
+def answer_query(
+    question: str,
+    region: str = "eu-west-2",
+    aws_profile: str = "default",
+    top_k: int = 3,
+    prompt_template: str = PROMPT_TEMPLATE,
+):
 
     # Get embeddings model and create embeding vector from query for the similarity search
-    embeddings_model = BedrockEmbeddings(model_id="amazon.titan-embed-text-v2:0", credentials_profile_name=aws_profile, region_name = region)
+    embeddings_model = BedrockEmbeddings(
+        model_id="amazon.titan-embed-text-v2:0",
+        credentials_profile_name=aws_profile,
+        region_name=region,
+    )
     embedding_vector = embeddings_model.embed_query(question)
 
-    ## Similarity search for K nearest docs 
+    ## Similarity search for K nearest docs
 
     conn = connect_to_db()
 
     with conn.cursor() as cur:
-        cur.execute("""
+        cur.execute(
+            """
             SELECT content, 1 - (embedding <=> %s::vector) AS score
             FROM documents
             ORDER BY embedding <=> %s::vector
             LIMIT %s;
-        """, (embedding_vector, embedding_vector, top_k))
+        """,
+            (embedding_vector, embedding_vector, top_k),
+        )
 
         results = cur.fetchall()
 
     conn.close()
-    
+
     ## K nearest results
     formatted_results = [{"content": r[0], "score": r[1]} for r in results]
 
-    ## Create Prompt 
+    ## Create Prompt
 
     prompt = PromptTemplate(
-        input_variables =  ["document_chunks","question"],
-        template = prompt_template
-    ).format(document_chunks = "\n\n".join([r["content"] for r in formatted_results]), question = question)
+        input_variables=["document_chunks", "question"], template=prompt_template
+    ).format(
+        document_chunks="\n\n".join([r["content"] for r in formatted_results]),
+        question=question,
+    )
 
-    llm = get_llm("anthropic.claude-3-7-sonnet-20250219-v1:0","eu-west-2",)
+    llm = get_llm(
+        "anthropic.claude-3-7-sonnet-20250219-v1:0",
+        "eu-west-2",
+    )
 
-    llm_response = get_llm_response(llm,prompt)
+    llm_response = get_llm_response(llm, prompt)
     return llm_response
+
 
 answer = answer_query("What is the probationary period?")
 
