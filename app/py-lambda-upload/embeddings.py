@@ -1,11 +1,14 @@
 from langchain_aws import BedrockEmbeddings
 from utils import logger
 import boto3
+import os 
+
+EMBEDDING_MODEL_ID = os.environ["EMBEDDING_MODEL"]
 
 bedrock_client = boto3.client(service_name="bedrock-runtime")
 
 embeddings_model = BedrockEmbeddings(
-    model_id="amazon.titan-embed-text-v2:0",
+    model_id=EMBEDDING_MODEL_ID,
     client=bedrock_client,
     region_name="eu-west-2",
 )

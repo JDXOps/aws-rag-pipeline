@@ -1,13 +1,16 @@
 from utils import connect_to_db
 import boto3 
 from langchain_aws import BedrockEmbeddings
+import os 
 
-def similarity_search(connection, query: str,  k: int ): 
+EMBEDDING_MODEL_ID = os.environ["EMBEDDING_MODEL"]
+
+def similarity_search(connection, query: str,  k: int ) -> list[tuple]: 
 
     bedrock_client = boto3.client(service_name="bedrock-runtime")
 
     embeddings_model = BedrockEmbeddings(
-        model_id="amazon.titan-embed-text-v2:0",
+        model_id=EMBEDDING_MODEL_ID,
         client=bedrock_client,
         region_name="eu-west-2",
     )
@@ -18,7 +21,7 @@ def similarity_search(connection, query: str,  k: int ):
     with connection as conn: 
         with conn.cursor() as cur: 
             cur.execute("""
-                SELECT content, 1 - (embedding <=> %s::vector) AS score
+                SELECT document, 1 - (embedding <=> %s::vector) AS score
                 FROM documents
                 ORDER BY embedding <=> %s::vector
                 LIMIT %s;

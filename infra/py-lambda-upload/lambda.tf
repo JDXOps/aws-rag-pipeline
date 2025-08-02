@@ -11,6 +11,7 @@ resource "aws_lambda_function" "py_lambda_upload" {
     variables = {
       POSTGRES_CREDS_NAME = "law-pdf-demo-db"
       POSTGRES_HOST       = aws_db_instance.default.address
+      EMBEDDING_MODEL     = var.embedding_model
     }
   }
 }

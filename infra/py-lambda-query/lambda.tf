@@ -10,7 +10,9 @@ resource "aws_lambda_function" "py_lambda_query" {
   environment {
     variables = {
       POSTGRES_CREDS_NAME = "law-pdf-demo-db"
-      POSTGRES_HOST       = var.db_url
+      POSTGRES_HOST       = data.aws_db_instance.database.address
+      EMBEDDING_MODEL     = var.embedding_model
+      SUMMARISATION_MODEL = var.summarisation_model
     }
   }
 }
@@ -83,7 +85,7 @@ data "aws_iam_policy_document" "py_lambda_query_bedrock_policy_document" {
       "bedrock:InvokeModel",
     ]
 
-    resources = [data.aws_bedrock_foundation_model.claude_sonnet_llm.model_arn]
+    resources = [data.aws_bedrock_foundation_model.summarisation_model.model_arn, data.aws_bedrock_foundation_model.embedding_model.model_arn]
   }
 }
 
