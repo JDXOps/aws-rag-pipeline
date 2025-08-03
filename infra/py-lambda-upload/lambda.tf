@@ -5,12 +5,13 @@ resource "aws_lambda_function" "py_lambda_upload" {
   role          = aws_iam_role.py_lambda_upload_execution_role.arn
   package_type  = "Image"
   image_uri     = "${aws_ecr_repository.py_lambda_upload.repository_url}:latest"
-  timeout       = 60
+  timeout       = 120
 
   environment {
     variables = {
       POSTGRES_CREDS_NAME = "law-pdf-demo-db"
       POSTGRES_HOST       = aws_db_instance.default.address
+      EMBEDDING_MODEL     = var.embedding_model
     }
   }
 }
