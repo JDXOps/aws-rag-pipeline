@@ -17,7 +17,6 @@ def similarity_search(connection, query: str,  k: int ) -> list[tuple]:
 
     query_vector = embeddings_model.embed_query(query)
 
-
     with connection as conn: 
         with conn.cursor() as cur: 
             cur.execute("""
@@ -27,6 +26,6 @@ def similarity_search(connection, query: str,  k: int ) -> list[tuple]:
                 LIMIT %s;
             """, (query_vector, query_vector, k))
 
-        results = cur.fetchall()
+            results = cur.fetchall()
     
     return results 
