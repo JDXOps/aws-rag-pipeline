@@ -1,7 +1,7 @@
 from langchain_aws import BedrockEmbeddings
 from utils import logger
 import boto3
-import os 
+import os
 
 EMBEDDING_MODEL_ID = os.environ["EMBEDDING_MODEL"]
 

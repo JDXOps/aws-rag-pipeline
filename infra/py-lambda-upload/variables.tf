@@ -9,7 +9,7 @@ variable "data_subnet_cidrs" {
 }
 
 variable "embedding_model" {
-    description = "The ID of the Bedrock Language Model that will be used to generate vector embeddings"
-    type = string 
-    default = "amazon.titan-embed-text-v2:0"
+  description = "The ID of the Bedrock Language Model that will be used to generate vector embeddings"
+  type        = string
+  default     = "amazon.titan-embed-text-v2:0"
 }

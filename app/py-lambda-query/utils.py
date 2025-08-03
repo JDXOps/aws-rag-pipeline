@@ -4,7 +4,7 @@ import json
 from botocore.exceptions import ClientError
 import psycopg
 import os
-
+from langchain_aws import ChatBedrock
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -28,6 +28,7 @@ POSTGRES_CRED = get_secret("law-pdf-demo-db")
 POSTGRES_USER = POSTGRES_CRED["username"]
 POSTGRES_PASS = POSTGRES_CRED.get("password")
 POSTGRES_HOST = os.environ["POSTGRES_HOST"]
+SUMMARISATION_MODEL_ID = os.environ["SUMMARISATION_MODEL"]
 
 
 def connect_to_db():
@@ -79,3 +80,16 @@ Law firm employees ranging from junior associates to senior partners.
 5. Do not reference or mention "chunk numbers", "sections", or any metadata from the documents. Just deliver the answer.
 
 """
+
+
+def get_llm(model_id: str, region: str):
+
+    return ChatBedrock(
+        model_id=model_id,
+        region_name=region,
+    )
+
+
+def get_llm_response(llm, prompt: str):
+    response = llm.invoke(prompt)
+    return response.content
