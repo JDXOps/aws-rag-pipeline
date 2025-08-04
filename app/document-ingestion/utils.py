@@ -10,7 +10,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-def get_secret(secret_name: str):
+def get_secret(secret_name: str) -> dict:
 
     client = boto3.client("secretsmanager", region_name="eu-west-2")
 
@@ -30,7 +30,7 @@ POSTGRES_PASS = POSTGRES_CRED.get("password")
 POSTGRES_HOST = os.environ["POSTGRES_HOST"]
 
 
-def connect_to_db():
+def connect_to_db() -> psycopg.Connection:
 
     try:
         conn = psycopg.connect(

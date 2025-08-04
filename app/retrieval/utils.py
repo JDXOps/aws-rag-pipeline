@@ -82,7 +82,7 @@ Law firm employees ranging from junior associates to senior partners.
 """
 
 
-def get_llm(model_id: str, region: str):
+def get_llm(model_id: str, region: str) -> ChatBedrock:
 
     return ChatBedrock(
         model_id=model_id,
@@ -90,6 +90,6 @@ def get_llm(model_id: str, region: str):
     )
 
 
-def get_llm_response(llm, prompt: str):
+def get_llm_response(llm, prompt: str) -> str:
     response = llm.invoke(prompt)
     return response.content

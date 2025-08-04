@@ -43,7 +43,7 @@ def summarisation(
     prompt_template: str,
     question: str,
     summarisation_model_id: str,
-):
+) -> str:
 
     prompt = PromptTemplate(
         input_variables=["document_chunks", "question"], template=prompt_template
