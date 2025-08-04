@@ -7,7 +7,7 @@ This project is a work in progress **Retrieval-Augmented Generation (RAG)** pipe
 
 - **AWS RDS Postgres** with `pgvector` for the Vector Store
 - **AWS Bedrock** to access foundation models (Titan and Claude)
-- **AWS Lambda** functions for serverless compute (document ingestion etc.)
+- **AWS Lambda** functions for serverless compute (document ingestion and retrieval)
 - **Langchain** for orchestrating LLM workflows
 
 ### Project Structure 
@@ -17,10 +17,14 @@ This project is a work in progress **Retrieval-Augmented Generation (RAG)** pipe
 ```
 .
 ├── README.md               # Project overview and documentation
-├── TODO.md                # Task tracking and roadmap
-├── app/                   # Core application code (Lambda functions, RAG logic)
-├── infra/                 # OpenTofu infrastructure code (VPC, RDS, Lambdas, etc.)
-└── scripts/               # Utility scripts for local dev, deployment, etc.
+├── TODO.md                 # Task tracking and roadmap
+├── app/                    # Core application code (Lambda functions, RAG logic)
+│   ├── document-ingestion/ # Ingestion pipeline  (PDFs → embeddings) 
+│   ├── retrieval/          # Retrieval pipeline AWS Lambda function (PDFs → embeddings)     
+├──infra/                   # OpenTofu Infrastructure as Code (IaC) modules 
+│   ├── document-ingestion/ # Ingestion pipeline IaC (PDFs → embeddings) 
+│   ├── retrieval/          # Query-time vector search and generation
+└── scripts/                # Utility scripts for local dev, deployment, etc.
 ```
 
 ## 🛠 Stack
