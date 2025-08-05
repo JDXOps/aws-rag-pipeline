@@ -75,7 +75,7 @@ resource "aws_iam_role_policy_attachment" "py_lambda_upload_cloudwatch_policy_at
   policy_arn = aws_iam_policy.py_lambda_upload_cloudwatch_policy.arn
 }
 
-## Lambda S3 Trigger on Document Upload
+# Policy to enable Lambda to generated S3 presigned urls 
 
 data "aws_iam_policy_document" "py_lambda_upload_s3_url_policy_doc" {
   statement {
