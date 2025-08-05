@@ -10,7 +10,7 @@ resource "aws_lambda_function" "py_lambda_query" {
   environment {
     variables = {
       POSTGRES_CREDS_NAME = "law-pdf-demo-db"
-      POSTGRES_HOST       = "data.aws_db_instance.database.address"
+      POSTGRES_HOST       = data.aws_db_instance.database.address
       EMBEDDING_MODEL     = var.embedding_model
       SUMMARISATION_MODEL = var.summarisation_model
     }
