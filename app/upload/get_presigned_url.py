@@ -9,6 +9,7 @@ MAX_FILE_SIZE = 20 * 1024 * 1024  # 20MB in bytes
 
 def get_presigned_url(filename: str) -> dict:
     try:
+        logger.info("Generating presigned URL")
         response = s3_client.generate_presigned_post(
             Bucket="law-pdf-demo",
             Key=f"upload/{filename}",
@@ -20,6 +21,7 @@ def get_presigned_url(filename: str) -> dict:
             ],
             ExpiresIn=300,
         )
+        logger.info("Generated presigned URL")
         return {"success": True, "data": response}
 
     except Exception as e:
