@@ -1,5 +1,5 @@
 from utils import logger, connect_to_db
-from pdf_retrieval import pdf_retrieval
+from process_pdf import process_pdf
 from embeddings import create_embeddings
 from vector_db import insert_embeddings
 
@@ -12,7 +12,7 @@ def lambda_handler(event, context):
         bucket_name = event["Records"][0]["s3"]["bucket"]["name"]
         object_key = event["Records"][0]["s3"]["object"]["key"]
 
-        pdf = pdf_retrieval(bucket_name, object_key)
+        pdf = process_pdf(bucket_name, object_key)
 
         embeddings = create_embeddings(pdf)
 
