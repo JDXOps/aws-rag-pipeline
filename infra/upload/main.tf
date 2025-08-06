@@ -81,6 +81,7 @@ data "aws_iam_policy_document" "py_lambda_upload_s3_url_policy_doc" {
   statement {
     actions = [
       "s3:GetObject",
+      "s3:PutObject",
     ]
     resources = [
       "${data.aws_s3_bucket.upload_s3_bucket.arn}/upload/*",

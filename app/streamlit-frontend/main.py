@@ -23,11 +23,11 @@ if uploaded_file is not None:
         response = requests.post(API_GW_ENDPOINT, json=payload, headers=headers)
 
         st.write("Presigned URL request status:", response.status_code)
-
         if response.status_code == 200:
+            
             presigned = response.json()
-            url = presigned["url"]
-            fields = presigned["fields"]
+            url = presigned["data"]["url"]
+            fields = presigned["data"]["fields"]
 
             files = {"file": (uploaded_file.name, uploaded_file, uploaded_file.type)}
 
