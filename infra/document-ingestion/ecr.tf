@@ -1,9 +1,9 @@
-resource "aws_ecr_repository" "py_lambda_upload" {
-  name                 = "py-lambda-upload"
+resource "aws_ecr_repository" "py_lambda_doc_ingestion" {
+  name                 = "py-lambda-doc-ingestion"
   image_tag_mutability = "MUTABLE"
 }
 
-data "aws_iam_policy_document" "py_lambda_upload_repository_policy" {
+data "aws_iam_policy_document" "py_lambda_doc_ingestion_repository_policy" {
   statement {
     sid    = "LambdaImagePull"
     effect = "Allow"
@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "py_lambda_upload_repository_policy" {
   }
 }
 
-resource "aws_ecr_repository_policy" "py_lambda_upload" {
-  repository = aws_ecr_repository.py_lambda_upload.name
-  policy     = data.aws_iam_policy_document.py_lambda_upload_repository_policy.json
+resource "aws_ecr_repository_policy" "py_lambda_doc_ingestion" {
+  repository = aws_ecr_repository.py_lambda_doc_ingestion.name
+  policy     = data.aws_iam_policy_document.py_lambda_doc_ingestion_repository_policy.json
 }
