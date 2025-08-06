@@ -1,5 +1,5 @@
 from utils import logger, connect_to_db
-from pdf_retrieval import pdf_retrieval
+from process_pdf import process_pdf
 from embeddings import create_embeddings
 from vector_db import insert_embeddings
 

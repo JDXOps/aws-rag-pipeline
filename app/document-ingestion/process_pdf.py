@@ -6,7 +6,7 @@ from utils import logger
 s3_client = boto3.client("s3")
 
 
-def pdf_retrieval(bucket_name: str, object_key: str) -> list[dict]:
+def process_pdf(bucket_name: str, object_key: str) -> list[dict]:
 
     logger.info("📄 Entered pdf_retrieval function!!!")  #
 
