@@ -27,13 +27,13 @@ resource "aws_api_gateway_integration" "aws_rag_api_gw_upload" {
   http_method             = aws_api_gateway_method.aws_rag_api_gw_upload_post.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = data.aws_lambda_function.upload_lambda_function.invoke_arn
+  uri                     = data.aws_lambda_function.py_lambda_upload.invoke_arn
 }
 
 resource "aws_lambda_permission" "api_gateway_invoke_permission" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = data.aws_lambda_function.upload_lambda_function.function_name
+  function_name = data.aws_lambda_function.py_lambda_upload.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.aws_rag_api_gw.execution_arn}/*/*"
 }
