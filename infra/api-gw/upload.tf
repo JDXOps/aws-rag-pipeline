@@ -1,7 +1,7 @@
 resource "aws_api_gateway_rest_api" "aws_rag_api_gw" {
   name               = "aws-rag-api-law-pdf-demo"
   description        = "API Gateway for the Law PDF demo (RAG)"
-  binary_media_types = ["application/pdf"]
+  binary_media_types = ["application/pdf","application/json"]
 }
 
 # get-presigned-url 
@@ -45,6 +45,14 @@ resource "aws_lambda_permission" "api_gateway_invoke_permission" {
 
 resource "aws_api_gateway_deployment" "aws_rag_api_gw_deployment" {
     rest_api_id = aws_api_gateway_rest_api.aws_rag_api_gw.id
+
+
+    depends_on = [
+      aws_api_gateway_method.aws_rag_api_gw_retrieval_post,
+      aws_api_gateway_integration.aws_rag_api_gw_retrieval,
+      aws_api_gateway_integration.aws_rag_api_gw_upload,
+      aws_api_gateway_method.aws_rag_api_gw_upload_post
+    ]
 }
 
 resource "aws_api_gateway_stage" "api_stage" {
