@@ -44,21 +44,21 @@ resource "aws_lambda_permission" "api_gateway_invoke_permission" {
 
 
 resource "aws_api_gateway_deployment" "aws_rag_api_gw_deployment" {
-    rest_api_id = aws_api_gateway_rest_api.aws_rag_api_gw.id
+  rest_api_id = aws_api_gateway_rest_api.aws_rag_api_gw.id
 
 
-    depends_on = [
-      aws_api_gateway_method.aws_rag_api_gw_retrieval_post,
-      aws_api_gateway_integration.aws_rag_api_gw_retrieval,
-      aws_api_gateway_integration.aws_rag_api_gw_upload,
-      aws_api_gateway_method.aws_rag_api_gw_upload_post
-    ]
+  depends_on = [
+    aws_api_gateway_method.aws_rag_api_gw_retrieval_post,
+    aws_api_gateway_integration.aws_rag_api_gw_retrieval,
+    aws_api_gateway_integration.aws_rag_api_gw_upload,
+    aws_api_gateway_method.aws_rag_api_gw_upload_post
+  ]
 }
 
 resource "aws_api_gateway_stage" "api_stage" {
-  stage_name           = "prod"
-  rest_api_id          = aws_api_gateway_rest_api.aws_rag_api_gw.id
-  deployment_id        = aws_api_gateway_deployment.aws_rag_api_gw_deployment.id
+  stage_name    = "prod"
+  rest_api_id   = aws_api_gateway_rest_api.aws_rag_api_gw.id
+  deployment_id = aws_api_gateway_deployment.aws_rag_api_gw_deployment.id
 
   access_log_settings {
     destination_arn = aws_cloudwatch_log_group.aws_rag_api_cwlg.arn
