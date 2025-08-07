@@ -1,7 +1,7 @@
 resource "aws_api_gateway_rest_api" "aws_rag_api_gw" {
   name               = "aws-rag-api-law-pdf-demo"
   description        = "API Gateway for the Law PDF demo (RAG)"
-  binary_media_types = ["application/pdf","application/json"]
+  binary_media_types = ["application/pdf"]
 }
 
 # get-presigned-url 

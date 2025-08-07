@@ -1,8 +1,15 @@
 import streamlit as st
 import requests
+from dotenv import load_dotenv
+import os
 
-API_GW_ENDPOINT_UPLOAD = "https://92h875uadc.execute-api.eu-west-2.amazonaws.com/prod/upload"
-API_GW_ENDPOINT_QUERY = "https://92h875uadc.execute-api.eu-west-2.amazonaws.com/prod/query"
+load_dotenv()
+
+API_GW_URL = os.environ.get("API_GW_URL")
+
+API_GW_ENDPOINT_UPLOAD = f"{API_GW_URL}/upload"
+API_GW_ENDPOINT_QUERY = f"{API_GW_URL}/query"
+
 
 
 st.title("Law PDF Demo RAG File Management")
@@ -19,6 +26,7 @@ if uploaded_file is not None:
 
         payload = {"filename": uploaded_file.name, "content_type": uploaded_file.type}
 
+
         headers = {"Content-Type": "application/json"}
 
         response = requests.post(API_GW_ENDPOINT_UPLOAD, json=payload, headers=headers)
@@ -31,7 +39,6 @@ if uploaded_file is not None:
             fields = presigned["data"]["fields"]
 
             files = {"file": (uploaded_file.name, uploaded_file, uploaded_file.type)}
-
             upload_response = requests.post(url, data=fields, files=files)
 
             if upload_response.status_code == 204:
