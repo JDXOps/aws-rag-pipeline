@@ -71,7 +71,7 @@ Law firm employees ranging from junior associates to senior partners.
 1. Review **all** of the provided chunks carefully.
 1. Only use the provided chunks to answer the question — **do not make assumptions or use outside knowledge**.  
 3. If multiple chunks provide similar information, choose the most accurate or authoritative phrasing. Do not refer to chunk numbers or locations — just include the relevant information naturally.
-4. Your final output must be in the following JSON format:
+4. Your final output must be in the following JSON format. **Return only the JSON object — no markdown, no extra text**.
 
 {{
   "query": "{question}",

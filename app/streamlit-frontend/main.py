@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 from dotenv import load_dotenv
 import os
+import json
 
 load_dotenv()
 
@@ -9,7 +10,6 @@ API_GW_URL = os.environ.get("API_GW_URL")
 
 API_GW_ENDPOINT_UPLOAD = f"{API_GW_URL}/upload"
 API_GW_ENDPOINT_QUERY = f"{API_GW_URL}/query"
-
 
 
 st.title("Law PDF Demo RAG File Management")
@@ -26,14 +26,13 @@ if uploaded_file is not None:
 
         payload = {"filename": uploaded_file.name, "content_type": uploaded_file.type}
 
-
         headers = {"Content-Type": "application/json"}
 
         response = requests.post(API_GW_ENDPOINT_UPLOAD, json=payload, headers=headers)
 
         st.write("Presigned URL request status:", response.status_code)
         if response.status_code == 200:
-            
+
             presigned = response.json()
             url = presigned["data"]["url"]
             fields = presigned["data"]["fields"]
@@ -61,15 +60,22 @@ query = st.text_input("Ask a question or enter search text:")
 if query:
     if st.button("Search"):
         with st.spinner("Searching..."):
-           try:
+            try:
                 payload = {"query": query}
                 headers = {"Content-Type": "application/json"}
 
-                response = requests.post(API_GW_ENDPOINT_QUERY, json=payload, headers=headers)
+                response = requests.post(
+                    API_GW_ENDPOINT_QUERY, json=payload, headers=headers
+                )
 
                 if response.status_code == 200:
-                    results = response.json()
-                    st.write("sucess")
-            
-           except Exception as e:
+                    result = response.json()
+
+                    parsed = json.loads(result)
+
+                    st.text_area("Answer", parsed.get("answer", "No answer found."))
+                    # st.success("✅ Search completed")
+                    # st.write("Answer:",result.get("answer", "No answer returned."))
+
+            except Exception as e:
                 st.error(f"Search failed: {e}")
