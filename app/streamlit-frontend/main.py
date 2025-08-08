@@ -74,8 +74,6 @@ if query:
                     parsed = json.loads(result)
 
                     st.text_area("Answer", parsed.get("answer", "No answer found."))
-                    # st.success("✅ Search completed")
-                    # st.write("Answer:",result.get("answer", "No answer returned."))
 
             except Exception as e:
                 st.error(f"Search failed: {e}")
