@@ -12,9 +12,9 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 resource "aws_iam_role" "api_gateway_role" {
-  name               = "aws-rag-api-gw-law-pdf-role"
+  name                = "aws-rag-api-gw-law-pdf-role"
   managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"]
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  assume_role_policy  = data.aws_iam_policy_document.assume_role.json
 }
 
 resource "aws_api_gateway_account" "api_gateway_settings" {

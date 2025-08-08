@@ -5,3 +5,7 @@ data "aws_region" "current" {}
 data "aws_lambda_function" "py_lambda_upload" {
   function_name = var.upload_lambda_function_name
 }
+
+data "aws_lambda_function" "py_lambda_query" {
+  function_name = var.query_lambda_function_name
+}

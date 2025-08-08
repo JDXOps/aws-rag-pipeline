@@ -7,7 +7,7 @@ variable "db_url" {
 variable "db_identifier" {
   description = "The DB Identifier of the RDS Postgres Instance."
   type        = string
-  default     = "terraform-20250802102541446400000001"
+  default     = "terraform-20250806134718913600000001"
 }
 
 variable "summarisation_model" {

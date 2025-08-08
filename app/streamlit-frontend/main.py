@@ -1,7 +1,15 @@
 import streamlit as st
 import requests
+from dotenv import load_dotenv
+import os
+import json
 
-API_GW_ENDPOINT = "https://92h875uadc.execute-api.eu-west-2.amazonaws.com/prod/upload"
+load_dotenv()
+
+API_GW_URL = os.environ.get("API_GW_URL")
+
+API_GW_ENDPOINT_UPLOAD = f"{API_GW_URL}/upload"
+API_GW_ENDPOINT_QUERY = f"{API_GW_URL}/query"
 
 
 st.title("Law PDF Demo RAG File Management")
@@ -20,17 +28,16 @@ if uploaded_file is not None:
 
         headers = {"Content-Type": "application/json"}
 
-        response = requests.post(API_GW_ENDPOINT, json=payload, headers=headers)
+        response = requests.post(API_GW_ENDPOINT_UPLOAD, json=payload, headers=headers)
 
         st.write("Presigned URL request status:", response.status_code)
         if response.status_code == 200:
-            
+
             presigned = response.json()
             url = presigned["data"]["url"]
             fields = presigned["data"]["fields"]
 
             files = {"file": (uploaded_file.name, uploaded_file, uploaded_file.type)}
-
             upload_response = requests.post(url, data=fields, files=files)
 
             if upload_response.status_code == 204:
@@ -44,3 +51,29 @@ if uploaded_file is not None:
         else:
             st.error("❌ Failed to get a presigned URL")
             st.text(response.text)
+
+
+st.header("🔎 Search Uploaded Documents")
+
+query = st.text_input("Ask a question or enter search text:")
+
+if query:
+    if st.button("Search"):
+        with st.spinner("Searching..."):
+            try:
+                payload = {"query": query}
+                headers = {"Content-Type": "application/json"}
+
+                response = requests.post(
+                    API_GW_ENDPOINT_QUERY, json=payload, headers=headers
+                )
+
+                if response.status_code == 200:
+                    result = response.json()
+
+                    parsed = json.loads(result)
+
+                    st.text_area("Answer", parsed.get("answer", "No answer found."))
+
+            except Exception as e:
+                st.error(f"Search failed: {e}")
